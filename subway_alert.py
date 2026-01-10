@@ -120,24 +120,35 @@ def check_bd_express(carroll_data, lafayette_data):
     return None
 
 
-def send_telegram(message):
-    """Send message via Telegram bot."""
-    bot_token = os.environ.get("TELEGRAM_BOT_TOKEN")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+def send_email(message):
+    """Send email alert via SMTP."""
+    import smtplib
+    from email.mime.text import MIMEText
+    
+    smtp_server = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
+    smtp_port = int(os.environ.get("SMTP_PORT", "587"))
+    smtp_user = os.environ.get("SMTP_USER")
+    smtp_password = os.environ.get("SMTP_PASSWORD")
+    to_email = os.environ.get("TO_EMAIL")
 
-    if not all([bot_token, chat_id]):
-        print("Telegram credentials not configured. Message:")
+    if not all([smtp_user, smtp_password, to_email]):
+        print("Email credentials not configured. Message:")
         print(message)
         return
 
-    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-    payload = {"chat_id": chat_id, "text": message, "parse_mode": "HTML"}
-    response = requests.post(url, json=payload, timeout=10)
-    
-    if response.ok:
-        print(f"Telegram sent: {message}")
-    else:
-        print(f"Telegram error: {response.text}")
+    msg = MIMEText(message)
+    msg["Subject"] = "🚇 SubwaySentinal Alert"
+    msg["From"] = smtp_user
+    msg["To"] = to_email
+
+    try:
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(smtp_user, smtp_password)
+            server.sendmail(smtp_user, to_email, msg.as_string())
+        print(f"Email sent: {message}")
+    except Exception as e:
+        print(f"Email error: {e}")
 
 
 def main(dry_run=False):
@@ -217,12 +228,12 @@ def main(dry_run=False):
             print(f"\nB/D Express: {bd_advice or 'No'}")
             print(f"\nMessage: {message}")
         else:
-            send_telegram(message)
+            send_email(message)
 
     except Exception as e:
         print(f"Error: {e}")
         if not dry_run:
-            send_telegram(f"SubwaySentinal Error: {e}")
+            send_email(f"SubwaySentinal Error: {e}")
 
 
 if __name__ == "__main__":
