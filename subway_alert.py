@@ -2,7 +2,6 @@ import argparse
 import os
 import requests
 from datetime import datetime, timezone
-from twilio.rest import Client
 
 # Stop IDs
 CARROLL_F21 = "F21"  # Carroll St
@@ -121,21 +120,24 @@ def check_bd_express(carroll_data, lafayette_data):
     return None
 
 
-def send_sms(message):
-    """Send SMS via Twilio."""
-    account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
-    auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
-    from_phone = os.environ.get("TWILIO_PHONE_NUMBER")
-    to_phone = os.environ.get("TO_PHONE_NUMBER")
+def send_telegram(message):
+    """Send message via Telegram bot."""
+    bot_token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
 
-    if not all([account_sid, auth_token, from_phone, to_phone]):
-        print("Twilio credentials not configured. Message:")
+    if not all([bot_token, chat_id]):
+        print("Telegram credentials not configured. Message:")
         print(message)
         return
 
-    client = Client(account_sid, auth_token)
-    client.messages.create(body=message, from_=from_phone, to=to_phone)
-    print(f"SMS sent: {message}")
+    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+    payload = {"chat_id": chat_id, "text": message, "parse_mode": "HTML"}
+    response = requests.post(url, json=payload, timeout=10)
+    
+    if response.ok:
+        print(f"Telegram sent: {message}")
+    else:
+        print(f"Telegram error: {response.text}")
 
 
 def main(dry_run=False):
@@ -215,12 +217,12 @@ def main(dry_run=False):
             print(f"\nB/D Express: {bd_advice or 'No'}")
             print(f"\nMessage: {message}")
         else:
-            send_sms(message)
+            send_telegram(message)
 
     except Exception as e:
         print(f"Error: {e}")
         if not dry_run:
-            send_sms(f"SubwaySentinal Error: {e}")
+            send_telegram(f"SubwaySentinal Error: {e}")
 
 
 if __name__ == "__main__":
