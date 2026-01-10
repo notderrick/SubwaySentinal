@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubwaySentinal</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        .recommendation {
+            background: linear-gradient(135deg, #7b2cbf 0%, #9d4edd 100%);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(123, 44, 191, 0.3);
+        }
+
+        .recommendation h2 {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .recommendation .train {
+            font-size: 4rem;
+            font-weight: bold;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card h3 {
+            font-size: 1rem;
+            color: #00d4ff;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .train-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .train-row:last-child {
+            border-bottom: none;
+        }
+
+        .train-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .train-badge.F {
+            background: #ff6319;
+        }
+
+        .train-badge.G {
+            background: #6cbe45;
+        }
+
+        .train-badge.B {
+            background: #ff6319;
+        }
+
+        .train-badge.D {
+            background: #ff6319;
+        }
+
+        .train-badge.A {
+            background: #0039a6;
+        }
+
+        .train-time {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .train-label {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .not-found {
+            color: #666;
+            font-style: italic;
+        }
+
+        .alert {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .viable {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .refresh-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0077b6 100%);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .error {
+            background: #e74c3c;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚇 SubwaySentinal</h1>
+        <p class="last-updated">Last updated: <span id="lastUpdated">--</span></p>
+
+        <div class="recommendation" id="recommendation">
+            <h2>Recommended</h2>
+            <div class="train" id="recommendedTrain">--</div>
+        </div>
+
+        <div class="card">
+            <h3>At Carroll St</h3>
+            <div class="train-row">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div class="train-badge F">F</div>
+                    <div>
+                        <span class="train-label">Next F train</span>
+                        <div style="color: #888; font-size: 0.8rem;" id="fLafayetteEta"></div>
+                    </div>
+                </div>
+                <div class="train-time" id="fTime">--</div>
+            </div>
+            <div class="train-row">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div class="train-badge G">G</div>
+                    <span class="train-label">Next G train</span>
+                </div>
+                <div class="train-time" id="gTime">--</div>
+            </div>
+        </div>
+
+        <div class="card" id="gSwitchCard" style="display: none;">
+            <h3>G-Switch Alert</h3>
+            <div class="alert" id="gSwitchAlert"></div>
+        </div>
+
+        <div class="card">
+            <h3>B/D Express at Lafayette</h3>
+            <p style="color: #888; margin-bottom: 10px;">F arrives at Lafayette in: <span id="fAtLafayette">--</span>
+                min</p>
+            <div id="bdTrains"></div>
+            <div id="bdExpressAlert" style="display: none;" class="alert"></div>
+        </div>
+
+        <button class="refresh-btn" onclick="loadData()">Refresh</button>
+    </div>
+
+    <script>
+        const BASE_URL = 'https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops';
+        const CARROLL_F21 = 'F21';
+        const HOYT_A42 = 'A42';
+        const LAFAYETTE_D21 = 'D21';
+        const CARROLL_TO_LAFAYETTE_TRAVEL_TIME = 8 * 60;
+
+        async function getArrivals(stopId) {
+            const response = await fetch(`${BASE_URL}/${stopId}`);
+            return response.json();
+        }
+
+        function parseArrivals(data, routes = null) {
+            const arrivals = [];
+            const now = Date.now() / 1000;
+
+            const stopTimes = data.stopTimes || [];
+            for (const st of stopTimes) {
+                const trip = st.trip || {};
+                const routeId = trip.route?.id || '';
+
+                if (routes && !routes.includes(routeId)) continue;
+
+                const arrivalInfo = st.arrival || st.departure || {};
+                const arrivalTime = parseInt(arrivalInfo.time);
+                if (arrivalTime) {
+                    const secondsUntil = arrivalTime - now;
+                    if (secondsUntil > 0) {
+                        arrivals.push({ route: routeId, seconds: secondsUntil });
+                    }
+                }
+            }
+
+            return arrivals.sort((a, b) => a.seconds - b.seconds);
+        }
+
+        function getNextTrain(arrivals, routes = null) {
+            for (const { route, seconds } of arrivals) {
+                if (!routes || routes.includes(route)) {
+                    return { route, seconds };
+                }
+            }
+            return { route: null, seconds: null };
+        }
+
+        async function loadData() {
+            try {
+                const [carrollData, hoytData, lafayetteData] = await Promise.all([
+                    getArrivals(CARROLL_F21),
+                    getArrivals(HOYT_A42),
+                    getArrivals(LAFAYETTE_D21)
+                ]);
+
+                const carrollArrivals = parseArrivals(carrollData);
+                const { route: fRoute, seconds: fTime } = getNextTrain(carrollArrivals, ['F']);
+                const { route: gRoute, seconds: gTime } = getNextTrain(carrollArrivals, ['G']);
+
+                // G-Switch logic
+                let gSwitch = null;
+                if (gTime && fTime && (fTime - gTime) >= 6 * 60) {
+                    const hoytArrivals = parseArrivals(hoytData);
+                    const { seconds: aTime } = getNextTrain(hoytArrivals, ['A']);
+                    if (aTime) {
+                        const gToHoytTime = gTime + 3 * 60;
+                        if (aTime <= gToHoytTime + 5 * 60) {
+                            gSwitch = 'G to A';
+                        }
+                    }
+                }
+
+                // B/D Express logic
+                let bdExpress = null;
+                const catchableBd = [];
+                if (fTime) {
+                    const fAtLafayette = fTime + CARROLL_TO_LAFAYETTE_TRAVEL_TIME;
+                    const lafayetteArrivals = parseArrivals(lafayetteData, ['B', 'D']);
+
+                    for (const { route, seconds: bdTime } of lafayetteArrivals) {
+                        const wait = bdTime - fAtLafayette;
+                        if (wait >= 0) {
+                            const viable = wait <= 3 * 60;
+                            catchableBd.push({ route, time: bdTime / 60, wait: wait / 60, viable });
+                            if (viable && !bdExpress) {
+                                bdExpress = `Transfer to ${route} at Lafayette`;
+                            }
+                            if (catchableBd.length >= 2) break;
+                        }
+                    }
+                }
+
+                // Recommendation
+                let recommended;
+                if (gSwitch) {
+                    recommended = 'G';
+                } else if (bdExpress) {
+                    if (bdExpress.includes('B')) {
+                        recommended = 'F → B';
+                    } else if (bdExpress.includes('D')) {
+                        recommended = 'F → D';
+                    } else {
+                        recommended = 'F';
+                    }
+                } else {
+                    recommended = 'F';
+                }
+
+                // Update UI
+                document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+                document.getElementById('recommendedTrain').textContent = recommended;
+
+                document.getElementById('fTime').textContent = fTime ? `${(fTime / 60).toFixed(1)} min` : '--';
+                document.getElementById('fTime').className = fTime ? 'train-time' : 'train-time not-found';
+
+                const fAtLafayetteTime = fTime ? (fTime + CARROLL_TO_LAFAYETTE_TRAVEL_TIME) / 60 : null;
+                document.getElementById('fLafayetteEta').textContent = fAtLafayetteTime ? `→ Lafayette in ${fAtLafayetteTime.toFixed(1)} min` : '';
+                document.getElementById('fAtLafayette').textContent = fAtLafayetteTime ? fAtLafayetteTime.toFixed(1) : '--';
+
+                document.getElementById('gTime').textContent = gTime ? `${(gTime / 60).toFixed(1)} min` : 'Not running';
+                document.getElementById('gTime').className = gTime ? 'train-time' : 'train-time not-found';
+
+                // G-Switch
+                const gSwitchCard = document.getElementById('gSwitchCard');
+                if (gSwitch) {
+                    gSwitchCard.style.display = 'block';
+                    document.getElementById('gSwitchAlert').textContent = gSwitch;
+                } else {
+                    gSwitchCard.style.display = 'none';
+                }
+
+                // B/D Express
+                const bdTrainsDiv = document.getElementById('bdTrains');
+                if (catchableBd.length > 0) {
+                    bdTrainsDiv.innerHTML = catchableBd.map(train => `
+                        <div class="train-row">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <div class="train-badge ${train.route}">${train.route}</div>
+                                <span class="train-label">in ${train.time.toFixed(1)} min</span>
+                            </div>
+                            <div>
+                                <span class="${train.viable ? 'viable' : ''}">wait ${train.wait.toFixed(1)} min</span>
+                                ${train.viable ? ' ✓' : ''}
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    bdTrainsDiv.innerHTML = '<p class="not-found">No catchable B/D trains</p>';
+                }
+
+                const bdAlert = document.getElementById('bdExpressAlert');
+                if (bdExpress) {
+                    bdAlert.style.display = 'block';
+                    bdAlert.textContent = '✓ ' + bdExpress;
+                } else {
+                    bdAlert.style.display = 'none';
+                }
+
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('recommendation').innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Load data on page load
+        loadData();
+
+        // Auto-refresh every 30 seconds
+        setInterval(loadData, 30000);
+
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => { });
+        }
+    </script>
+</body>
+
+</html>
