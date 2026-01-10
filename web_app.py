@@ -97,7 +97,18 @@ def get_subway_data():
                         break
 
         # Recommendation
-        recommended = "G" if g_switch else "F"
+        if g_switch:
+            recommended = "G"
+        elif bd_express:
+            # Extract which train from bd_express
+            if "B" in bd_express:
+                recommended = "F → B"
+            elif "D" in bd_express:
+                recommended = "F → D"
+            else:
+                recommended = "F"
+        else:
+            recommended = "F"
 
         return {
             "f_time": round(f_time / 60, 1) if f_time else None,

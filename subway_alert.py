@@ -178,6 +178,11 @@ def main(dry_run=False):
         bd_advice = check_bd_express(carroll_data, lafayette_data)
         if bd_advice:
             transfer_advice = bd_advice
+            # Extract which train (B or D) from the advice
+            if "B" in bd_advice:
+                recommended_train = "F → B"
+            elif "D" in bd_advice:
+                recommended_train = "F → D"
 
         # Build verbose message for email
         lines = []
