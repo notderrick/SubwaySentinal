@@ -9,6 +9,7 @@ HOYT_A42 = "A42"     # Hoyt-Schermerhorn Sts
 LAFAYETTE_D21 = "D21"  # Broadway-Lafayette St
 
 BASE_URL = "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops"
+ROUTE_BASE_URL = "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/routes"
 
 # Approximate travel time from Carroll to Lafayette (in seconds)
 CARROLL_TO_LAFAYETTE_TRAVEL_TIME = 8 * 60  # ~8 minutes
@@ -117,7 +118,43 @@ def check_bd_express(carroll_data, lafayette_data):
         if 0 <= (bd_time - f_at_lafayette) <= 3 * 60:
             return f"Transfer to {route} at Lafayette for Express"
 
-    return None
+
+def get_service_alerts(routes):
+    """Fetch active service alerts for specified routes."""
+    alerts = []
+    seen_ids = set()
+    
+    for route in routes:
+        try:
+            url = f"{ROUTE_BASE_URL}/{route}"
+            response = requests.get(url, timeout=5)
+            if response.ok:
+                data = response.json()
+                route_alerts = data.get("alerts", [])
+                for alert in route_alerts:
+                    alert_id = alert.get("id")
+                    if alert_id and alert_id not in seen_ids:
+                        seen_ids.add(alert_id)
+                        
+                        header_list = alert.get("header", [])
+                        header = "Service Alert"
+                        if header_list and isinstance(header_list, list) and "text" in header_list[0]:
+                            header = header_list[0]["text"]
+                            
+                        desc_list = alert.get("description", [])
+                        description = ""
+                        if desc_list and isinstance(desc_list, list) and "text" in desc_list[0]:
+                            description = desc_list[0]["text"]
+
+                        alerts.append({
+                            "route": route,
+                            "header": header,
+                            "description": description
+                        })
+        except Exception:
+            continue
+            
+    return alerts
 
 
 def send_email(message):
@@ -221,8 +258,21 @@ def main(dry_run=False):
             else:
                 lines.append("  No B/D trains at Lafayette")
             
-            if bd_advice:
-                lines.append(f"  ✓ {bd_advice}")
+        if bd_advice:
+            lines.append(f"  ✓ {bd_advice}")
+
+        # Service Alerts
+        service_alerts = get_service_alerts(["F", "G", "B", "D"])
+        if service_alerts:
+            lines.append("")
+            lines.append("⚠️ SERVICE ALERTS")
+            for alert in service_alerts:
+                lines.append(f"[{alert['route']}] {alert['header']}")
+
+
+
+
+
         
         message = "\n".join(lines)
 

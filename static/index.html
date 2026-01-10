@@ -230,11 +230,17 @@
             <div id="bdExpressAlert" style="display: none;" class="alert"></div>
         </div>
 
+        <div class="card" id="serviceAlertsCard" style="display: none;">
+            <h3>⚠️ Service Alerts</h3>
+            <div id="serviceAlertsList"></div>
+        </div>
+
         <button class="refresh-btn" onclick="loadData()">Refresh</button>
     </div>
 
     <script>
         const BASE_URL = 'https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops';
+        const ROUTE_BASE_URL = 'https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/routes';
         const CARROLL_F21 = 'F21';
         const HOYT_A42 = 'A42';
         const LAFAYETTE_D21 = 'D21';
@@ -278,6 +284,31 @@
             return { route: null, seconds: null };
         }
 
+        async function getServiceAlerts(routes) {
+            const alerts = [];
+            const seenIds = new Set();
+
+            for (const route of routes) {
+                try {
+                    const response = await fetch(`${ROUTE_BASE_URL}/${route}`);
+                    const data = await response.json();
+                    if (data.alerts) {
+                        for (const alert of data.alerts) {
+                            if (!seenIds.has(alert.id)) {
+                                seenIds.add(alert.id);
+                                alerts.push({
+                                    route: route,
+                                    header: (Array.isArray(alert.header) && alert.header.length > 0 && alert.header[0].text) ? alert.header[0].text : 'Service Alert',
+                                    description: (Array.isArray(alert.description) && alert.description.length > 0 && alert.description[0].text) ? alert.description[0].text : ''
+                                });
+                            }
+                        }
+                    }
+                } catch (e) { console.error(e); }
+            }
+            return alerts;
+        }
+
         async function loadData() {
             try {
                 const [carrollData, hoytData, lafayetteData] = await Promise.all([
@@ -285,6 +316,27 @@
                     getArrivals(HOYT_A42),
                     getArrivals(LAFAYETTE_D21)
                 ]);
+
+                // Fetch alerts in parallel (but don't block main data if it fails)
+                getServiceAlerts(['F', 'G', 'B', 'D']).then(alerts => {
+                    const alertCard = document.getElementById('serviceAlertsCard');
+                    const alertList = document.getElementById('serviceAlertsList');
+
+                    if (alerts.length > 0) {
+                        alertCard.style.display = 'block';
+                        alertList.innerHTML = alerts.map(alert => `
+                            <div class="alert" style="background: rgba(255, 255, 255, 0.05); margin-bottom: 10px;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                                    <div class="train-badge ${alert.route}" style="width: 30px; height: 30px; font-size: 1rem;">${alert.route}</div>
+                                    <strong style="font-size: 0.9rem;">${alert.header}</strong>
+                                </div>
+                                <p style="font-size: 0.8rem; color: #ccc; max-height: 100px; overflow-y: auto;">${alert.description}</p>
+                            </div>
+                        `).join('');
+                    } else {
+                        alertCard.style.display = 'none';
+                    }
+                });
 
                 const carrollArrivals = parseArrivals(carrollData);
                 const { route: fRoute, seconds: fTime } = getNextTrain(carrollArrivals, ['F']);
