@@ -1,0 +1,32 @@
+name: Subway Alert
+
+on:
+  schedule:
+    # Run weekdays at 7:30 AM and 8:30 AM EST (12:30 and 13:30 UTC)
+    - cron: '30 12 * * 1-5'
+    - cron: '30 13 * * 1-5'
+  workflow_dispatch:  # Allow manual triggers
+
+jobs:
+  send-alert:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run subway alert script
+        env:
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }}
+          TO_PHONE_NUMBER: ${{ secrets.TO_PHONE_NUMBER }}
+        run: python subway_alert.py
