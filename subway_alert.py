@@ -115,7 +115,7 @@ def check_bd_express(carroll_data, lafayette_data):
 
     for route, bd_time in lafayette_arrivals:
         # F arrives within 2 minutes before B/D
-        if 0 <= (bd_time - f_at_lafayette) <= 2 * 60:
+        if 0 <= (bd_time - f_at_lafayette) <= 3 * 60:
             return f"Transfer to {route} at Lafayette for Express"
 
     return None
@@ -196,7 +196,7 @@ def main(dry_run=False):
                     for route, bd_time in lafayette_arrivals:
                         wait_at_lafayette = bd_time - f_at_lafayette
                         if wait_at_lafayette >= 0:
-                            viable = "✓ TRANSFER" if wait_at_lafayette <= 2 * 60 else ""
+                            viable = "✓ TRANSFER" if wait_at_lafayette <= 3 * 60 else ""
                             catchable.append((route, bd_time, wait_at_lafayette, viable))
                             if len(catchable) >= 2:
                                 break

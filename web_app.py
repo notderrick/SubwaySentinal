@@ -84,7 +84,7 @@ def get_subway_data():
             for route, bd_time in lafayette_arrivals:
                 wait = bd_time - f_at_lafayette
                 if wait >= 0:
-                    viable = wait <= 2 * 60
+                    viable = wait <= 3 * 60
                     catchable_bd.append({
                         "route": route,
                         "time": bd_time / 60,
