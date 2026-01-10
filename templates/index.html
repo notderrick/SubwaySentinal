@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -18,12 +19,12 @@
             color: #fff;
             padding: 20px;
         }
-        
+
         .container {
             max-width: 600px;
             margin: 0 auto;
         }
-        
+
         h1 {
             text-align: center;
             font-size: 2.5rem;
@@ -33,14 +34,14 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .last-updated {
             text-align: center;
             color: #888;
             font-size: 0.9rem;
             margin-bottom: 30px;
         }
-        
+
         .recommendation {
             background: linear-gradient(135deg, #7b2cbf 0%, #9d4edd 100%);
             border-radius: 20px;
@@ -49,18 +50,18 @@
             margin-bottom: 20px;
             box-shadow: 0 10px 40px rgba(123, 44, 191, 0.3);
         }
-        
+
         .recommendation h2 {
             font-size: 1.2rem;
             opacity: 0.9;
             margin-bottom: 10px;
         }
-        
+
         .recommendation .train {
             font-size: 4rem;
             font-weight: bold;
         }
-        
+
         .card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -69,7 +70,7 @@
             margin-bottom: 15px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .card h3 {
             font-size: 1rem;
             color: #00d4ff;
@@ -77,7 +78,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        
+
         .train-row {
             display: flex;
             justify-content: space-between;
@@ -85,11 +86,11 @@
             padding: 10px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .train-row:last-child {
             border-bottom: none;
         }
-        
+
         .train-badge {
             width: 40px;
             height: 40px;
@@ -100,44 +101,58 @@
             font-weight: bold;
             font-size: 1.2rem;
         }
-        
-        .train-badge.F { background: #ff6319; }
-        .train-badge.G { background: #6cbe45; }
-        .train-badge.B { background: #ff6319; }
-        .train-badge.D { background: #ff6319; }
-        .train-badge.A { background: #0039a6; }
-        
+
+        .train-badge.F {
+            background: #ff6319;
+        }
+
+        .train-badge.G {
+            background: #6cbe45;
+        }
+
+        .train-badge.B {
+            background: #ff6319;
+        }
+
+        .train-badge.D {
+            background: #ff6319;
+        }
+
+        .train-badge.A {
+            background: #0039a6;
+        }
+
         .train-time {
             font-size: 1.5rem;
             font-weight: bold;
         }
-        
+
         .train-label {
             color: #888;
             font-size: 0.9rem;
         }
-        
+
         .not-found {
             color: #666;
             font-style: italic;
         }
-        
+
         .alert {
             background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
             border-radius: 10px;
             padding: 15px;
             margin-top: 10px;
         }
-        
+
         .alert.warning {
             background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
         }
-        
+
         .viable {
             color: #00ff88;
             font-weight: bold;
         }
-        
+
         .refresh-btn {
             display: block;
             width: 100%;
@@ -151,12 +166,12 @@
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
         .refresh-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
         }
-        
+
         .error {
             background: #e74c3c;
             padding: 20px;
@@ -165,22 +180,26 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>🚇 SubwaySentinal</h1>
         <p class="last-updated">Last updated: <span id="lastUpdated">--</span></p>
-        
+
         <div class="recommendation" id="recommendation">
             <h2>Recommended</h2>
             <div class="train" id="recommendedTrain">--</div>
         </div>
-        
+
         <div class="card">
             <h3>At Carroll St</h3>
             <div class="train-row">
                 <div style="display: flex; align-items: center; gap: 15px;">
                     <div class="train-badge F">F</div>
-                    <span class="train-label">Next F train</span>
+                    <div>
+                        <span class="train-label">Next F train</span>
+                        <div style="color: #888; font-size: 0.8rem;" id="fLafayetteEta"></div>
+                    </div>
                 </div>
                 <div class="train-time" id="fTime">--</div>
             </div>
@@ -192,42 +211,44 @@
                 <div class="train-time" id="gTime">--</div>
             </div>
         </div>
-        
+
         <div class="card" id="gSwitchCard" style="display: none;">
             <h3>G-Switch Alert</h3>
             <div class="alert" id="gSwitchAlert"></div>
         </div>
-        
+
         <div class="card">
             <h3>B/D Express at Lafayette</h3>
-            <p style="color: #888; margin-bottom: 10px;">F arrives at Lafayette in: <span id="fAtLafayette">--</span> min</p>
+            <p style="color: #888; margin-bottom: 10px;">F arrives at Lafayette in: <span id="fAtLafayette">--</span>
+                min</p>
             <div id="bdTrains"></div>
             <div id="bdExpressAlert" style="display: none;" class="alert"></div>
         </div>
-        
+
         <button class="refresh-btn" onclick="loadData()">Refresh</button>
     </div>
-    
+
     <script>
         async function loadData() {
             try {
                 const response = await fetch('/api/data');
                 const data = await response.json();
-                
+
                 if (data.error) {
                     document.getElementById('recommendation').innerHTML = `<div class="error">${data.error}</div>`;
                     return;
                 }
-                
+
                 // Update times
                 document.getElementById('lastUpdated').textContent = data.last_updated;
                 document.getElementById('recommendedTrain').textContent = data.recommended;
                 document.getElementById('fTime').textContent = data.f_time ? `${data.f_time} min` : '--';
                 document.getElementById('fTime').className = data.f_time ? 'train-time' : 'train-time not-found';
-                
+                document.getElementById('fLafayetteEta').textContent = data.f_at_lafayette ? `→ Lafayette in ${data.f_at_lafayette} min` : '';
+
                 document.getElementById('gTime').textContent = data.g_time ? `${data.g_time} min` : 'Not running';
                 document.getElementById('gTime').className = data.g_time ? 'train-time' : 'train-time not-found';
-                
+
                 // G-Switch
                 const gSwitchCard = document.getElementById('gSwitchCard');
                 if (data.g_switch) {
@@ -236,10 +257,10 @@
                 } else {
                     gSwitchCard.style.display = 'none';
                 }
-                
+
                 // B/D Express
                 document.getElementById('fAtLafayette').textContent = data.f_at_lafayette || '--';
-                
+
                 const bdTrainsDiv = document.getElementById('bdTrains');
                 if (data.catchable_bd && data.catchable_bd.length > 0) {
                     bdTrainsDiv.innerHTML = data.catchable_bd.map(train => `
@@ -257,7 +278,7 @@
                 } else {
                     bdTrainsDiv.innerHTML = '<p class="not-found">No catchable B/D trains</p>';
                 }
-                
+
                 const bdAlert = document.getElementById('bdExpressAlert');
                 if (data.bd_express) {
                     bdAlert.style.display = 'block';
@@ -265,17 +286,18 @@
                 } else {
                     bdAlert.style.display = 'none';
                 }
-                
+
             } catch (error) {
                 console.error('Error loading data:', error);
             }
         }
-        
+
         // Load data on page load
         loadData();
-        
+
         // Auto-refresh every 30 seconds
         setInterval(loadData, 30000);
     </script>
 </body>
+
 </html>
