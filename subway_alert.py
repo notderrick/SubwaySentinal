@@ -1,12 +1,13 @@
+import argparse
 import os
 import requests
 from datetime import datetime, timezone
 from twilio.rest import Client
 
 # Stop IDs
-CARROLL_F14 = "F14"
-HOYT_A42 = "A42"
-LAFAYETTE_F18 = "F18"
+CARROLL_F21 = "F21"  # Carroll St
+HOYT_A42 = "A42"     # Hoyt-Schermerhorn Sts
+LAFAYETTE_D21 = "D21"  # Broadway-Lafayette St
 
 BASE_URL = "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops"
 
@@ -22,23 +23,18 @@ def get_arrivals(stop_id):
     return response.json()
 
 
-def parse_arrivals(data, direction=None, routes=None):
+def parse_arrivals(data, routes=None):
     """
     Parse arrivals from API response.
     Returns list of (route, arrival_time_seconds_from_now) tuples.
     """
     arrivals = []
-    now = datetime.now(timezone.utc)
+    now = datetime.now(timezone.utc).timestamp()
 
     stop_times = data.get("stopTimes", [])
     for st in stop_times:
         trip = st.get("trip", {})
         route_id = trip.get("route", {}).get("id", "")
-        trip_direction = trip.get("direction", "")
-
-        # Filter by direction if specified
-        if direction and trip_direction != direction:
-            continue
 
         # Filter by routes if specified
         if routes and route_id not in routes:
@@ -47,8 +43,9 @@ def parse_arrivals(data, direction=None, routes=None):
         arrival_info = st.get("arrival", {}) or st.get("departure", {})
         arrival_time_str = arrival_info.get("time")
         if arrival_time_str:
-            arrival_time = datetime.fromisoformat(arrival_time_str.replace("Z", "+00:00"))
-            seconds_until = (arrival_time - now).total_seconds()
+            # API returns Unix timestamp as string
+            arrival_time = int(arrival_time_str)
+            seconds_until = arrival_time - now
             if seconds_until > 0:
                 arrivals.append((route_id, seconds_until))
 
@@ -69,7 +66,7 @@ def check_g_switch(carroll_data, hoyt_data):
     If G at Carroll is 6+ min earlier than F, check A at Hoyt.
     If A arrives within 5 min of G's arrival, recommend 'G to A'.
     """
-    carroll_arrivals = parse_arrivals(carroll_data, direction="NORTH")
+    carroll_arrivals = parse_arrivals(carroll_data)
 
     g_route, g_time = get_next_train(carroll_arrivals, routes=["G"])
     f_route, f_time = get_next_train(carroll_arrivals, routes=["F"])
@@ -82,7 +79,7 @@ def check_g_switch(carroll_data, hoyt_data):
         return None, None, None
 
     # Check A train at Hoyt
-    hoyt_arrivals = parse_arrivals(hoyt_data, direction="NORTH")
+    hoyt_arrivals = parse_arrivals(hoyt_data)
     a_route, a_time = get_next_train(hoyt_arrivals, routes=["A"])
 
     if a_time is None:
@@ -104,7 +101,7 @@ def check_bd_express(carroll_data, lafayette_data):
     If F from Carroll arrives at Lafayette within 2 min before a Northbound B or D,
     recommend transfer.
     """
-    carroll_arrivals = parse_arrivals(carroll_data, direction="NORTH")
+    carroll_arrivals = parse_arrivals(carroll_data)
     f_route, f_time = get_next_train(carroll_arrivals, routes=["F"])
 
     if f_time is None:
@@ -114,7 +111,7 @@ def check_bd_express(carroll_data, lafayette_data):
     f_at_lafayette = f_time + CARROLL_TO_LAFAYETTE_TRAVEL_TIME
 
     # Check B/D at Lafayette
-    lafayette_arrivals = parse_arrivals(lafayette_data, direction="NORTH", routes=["B", "D"])
+    lafayette_arrivals = parse_arrivals(lafayette_data, routes=["B", "D"])
 
     for route, bd_time in lafayette_arrivals:
         # F arrives within 2 minutes before B/D
@@ -141,15 +138,15 @@ def send_sms(message):
     print(f"SMS sent: {message}")
 
 
-def main():
+def main(dry_run=False):
     try:
         # Fetch data for all stops
-        carroll_data = get_arrivals(CARROLL_F14)
+        carroll_data = get_arrivals(CARROLL_F21)
         hoyt_data = get_arrivals(HOYT_A42)
-        lafayette_data = get_arrivals(LAFAYETTE_F18)
+        lafayette_data = get_arrivals(LAFAYETTE_D21)
 
         # Determine base recommendation
-        carroll_arrivals = parse_arrivals(carroll_data, direction="NORTH")
+        carroll_arrivals = parse_arrivals(carroll_data)
         f_route, f_time = get_next_train(carroll_arrivals, routes=["F"])
         g_route, g_time = get_next_train(carroll_arrivals, routes=["G"])
 
@@ -178,13 +175,25 @@ def main():
 
         message = " ".join(message_parts)
 
-        # Send SMS
-        send_sms(message)
+        # Debug info for dry run
+        if dry_run:
+            print("=== DRY RUN ===")
+            print(f"F train: {f_time/60:.1f} min" if f_time else "F train: Not found")
+            print(f"G train: {g_time/60:.1f} min" if g_time else "G train: Not found")
+            print(f"G-Switch: {g_switch or 'No'}")
+            print(f"B/D Express: {bd_advice or 'No'}")
+            print(f"\nMessage: {message}")
+        else:
+            send_sms(message)
 
     except Exception as e:
         print(f"Error: {e}")
-        send_sms(f"SubwaySentinal Error: {e}")
+        if not dry_run:
+            send_sms(f"SubwaySentinal Error: {e}")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Subway route advisor")
+    parser.add_argument("--dry-run", action="store_true", help="Print output without sending SMS")
+    args = parser.parse_args()
+    main(dry_run=args.dry_run)
