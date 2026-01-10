@@ -181,7 +181,40 @@ def main(dry_run=False):
             print(f"F train: {f_time/60:.1f} min" if f_time else "F train: Not found")
             print(f"G train: {g_time/60:.1f} min" if g_time else "G train: Not found")
             print(f"G-Switch: {g_switch or 'No'}")
-            print(f"B/D Express: {bd_advice or 'No'}")
+            print()
+            
+            # B/D Express diagnostics
+            print("=== B/D Express Diagnostics ===")
+            if f_time:
+                f_at_lafayette = f_time + CARROLL_TO_LAFAYETTE_TRAVEL_TIME
+                print(f"F arrives at Lafayette in: {f_at_lafayette/60:.1f} min")
+                
+                lafayette_arrivals = parse_arrivals(lafayette_data, routes=["B", "D"])
+                if lafayette_arrivals:
+                    first_viable = None
+                    print(f"  Found {len(lafayette_arrivals)} B/D trains:")
+                    for route, bd_time in lafayette_arrivals:
+                        wait_at_lafayette = bd_time - f_at_lafayette
+                        if wait_at_lafayette >= 0 and first_viable is None:
+                            first_viable = (route, bd_time, wait_at_lafayette)
+                        viable = "✓ TRANSFER" if 0 <= wait_at_lafayette <= 2 * 60 else ""
+                        # Only show trains you could potentially catch (wait >= -5 min)
+                        if wait_at_lafayette >= -5 * 60:
+                            print(f"    {route} in {bd_time/60:.1f} min (wait: {wait_at_lafayette/60:+.1f} min) {viable}")
+                    
+                    if first_viable:
+                        route, bd_time, wait = first_viable
+                        print(f"\n  → First catchable {route}: wait {wait/60:.1f} min at Lafayette")
+                        if wait <= 2 * 60:
+                            print(f"    ✓ VIABLE TRANSFER!")
+                        else:
+                            print(f"    ✗ Wait too long (need ≤2 min)")
+                else:
+                    print("  No B/D trains found at Lafayette")
+            else:
+                print("  Cannot calculate - no F train found")
+            
+            print(f"\nB/D Express: {bd_advice or 'No'}")
             print(f"\nMessage: {message}")
         else:
             send_sms(message)
