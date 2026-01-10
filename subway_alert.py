@@ -191,24 +191,22 @@ def main(dry_run=False):
                 
                 lafayette_arrivals = parse_arrivals(lafayette_data, routes=["B", "D"])
                 if lafayette_arrivals:
-                    first_viable = None
-                    print(f"  Found {len(lafayette_arrivals)} B/D trains:")
+                    # Find first two catchable trains (wait >= 0)
+                    catchable = []
                     for route, bd_time in lafayette_arrivals:
                         wait_at_lafayette = bd_time - f_at_lafayette
-                        if wait_at_lafayette >= 0 and first_viable is None:
-                            first_viable = (route, bd_time, wait_at_lafayette)
-                        viable = "✓ TRANSFER" if 0 <= wait_at_lafayette <= 2 * 60 else ""
-                        # Only show trains you could potentially catch (wait >= -5 min)
-                        if wait_at_lafayette >= -5 * 60:
-                            print(f"    {route} in {bd_time/60:.1f} min (wait: {wait_at_lafayette/60:+.1f} min) {viable}")
+                        if wait_at_lafayette >= 0:
+                            viable = "✓ TRANSFER" if wait_at_lafayette <= 2 * 60 else ""
+                            catchable.append((route, bd_time, wait_at_lafayette, viable))
+                            if len(catchable) >= 2:
+                                break
                     
-                    if first_viable:
-                        route, bd_time, wait = first_viable
-                        print(f"\n  → First catchable {route}: wait {wait/60:.1f} min at Lafayette")
-                        if wait <= 2 * 60:
-                            print(f"    ✓ VIABLE TRANSFER!")
-                        else:
-                            print(f"    ✗ Wait too long (need ≤2 min)")
+                    if catchable:
+                        print(f"  First catchable trains:")
+                        for route, bd_time, wait, viable in catchable:
+                            print(f"    {route} in {bd_time/60:.1f} min (wait: {wait/60:.1f} min) {viable}")
+                    else:
+                        print("  No catchable B/D trains found")
                 else:
                     print("  No B/D trains found at Lafayette")
             else:
