@@ -73,12 +73,18 @@
         }
 
         .recommendation {
-            background: linear-gradient(135deg, #7b2cbf 0%, #9d4edd 100%);
+            background: linear-gradient(135deg, #ff6319 0%, #ff8c00 100%);
             border-radius: 20px;
             padding: 30px;
             text-align: center;
             margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(123, 44, 191, 0.3);
+            box-shadow: 0 10px 40px rgba(255, 99, 25, 0.3);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .recommendation.recommend-g {
+            background: linear-gradient(135deg, #6cbe45 0%, #8cd867 100%);
+            box-shadow: 0 10px 40px rgba(108, 190, 69, 0.3);
         }
 
         .recommendation h2 {
@@ -469,6 +475,14 @@
                 // Update UI
                 document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
                 document.getElementById('recommendedTrain').textContent = recommended;
+
+                // Dynamic recommendation box color
+                const recBox = document.getElementById('recommendation');
+                if (recommended === 'G') {
+                    recBox.classList.add('recommend-g');
+                } else {
+                    recBox.classList.remove('recommend-g');
+                }
 
                 document.getElementById('fTime').textContent = fTime ? `${(fTime / 60).toFixed(1)} min` : '--';
                 document.getElementById('fTime').className = fTime ? 'train-time' : 'train-time not-found';
