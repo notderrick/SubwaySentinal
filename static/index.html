@@ -221,7 +221,9 @@
 
 <body>
     <div class="container">
-        <h1>🚇 SubwaySentinal</h1>
+        <div style="text-align: center; margin-bottom: 10px;">
+            <img src="/logo.png" alt="SubwaySentinal" style="max-width: 200px; height: auto;">
+        </div>
         <p class="last-updated">Last updated: <span id="lastUpdated">--</span></p>
 
         <div class="station-toggle">
@@ -269,8 +271,12 @@
         </div>
 
         <div class="card" id="serviceAlertsCard" style="display: none;">
-            <h3>⚠️ Service Alerts</h3>
-            <div id="serviceAlertsList"></div>
+            <h3 onclick="toggleAlerts()"
+                style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                ⚠️ Service Alerts
+                <span id="alertsToggle" style="font-size: 0.8rem;">▼</span>
+            </h3>
+            <div id="serviceAlertsList" style="display: none;"></div>
         </div>
 
         <button class="refresh-btn" onclick="loadData()">Refresh</button>
@@ -533,6 +539,18 @@
             } catch (error) {
                 console.error('Error loading data:', error);
                 document.getElementById('recommendation').innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+
+        function toggleAlerts() {
+            const list = document.getElementById('serviceAlertsList');
+            const toggle = document.getElementById('alertsToggle');
+            if (list.style.display === 'none') {
+                list.style.display = 'block';
+                toggle.textContent = '▲';
+            } else {
+                list.style.display = 'none';
+                toggle.textContent = '▼';
             }
         }
 
