@@ -332,6 +332,7 @@
             for (const st of stopTimes) {
                 const trip = st.trip || {};
                 const routeId = trip.route?.id || '';
+                const tripUrl = trip.resource?.url || null;
 
                 if (routes && !routes.includes(routeId)) continue;
 
@@ -340,7 +341,7 @@
                 if (arrivalTime) {
                     const secondsUntil = arrivalTime - now;
                     if (secondsUntil > 0) {
-                        arrivals.push({ route: routeId, seconds: secondsUntil });
+                        arrivals.push({ route: routeId, seconds: secondsUntil, tripUrl });
                     }
                 }
             }
@@ -349,12 +350,37 @@
         }
 
         function getNextTrain(arrivals, routes = null) {
-            for (const { route, seconds } of arrivals) {
+            for (const { route, seconds, tripUrl } of arrivals) {
                 if (!routes || routes.includes(route)) {
-                    return { route, seconds };
+                    return { route, seconds, tripUrl };
                 }
             }
-            return { route: null, seconds: null };
+            return { route: null, seconds: null, tripUrl: null };
+        }
+
+        async function getLafayetteArrivalFromTrip(tripUrl) {
+            // Fetch trip data and find Lafayette arrival time
+            if (!tripUrl) return null;
+
+            try {
+                const response = await fetch(tripUrl);
+                const tripData = await response.json();
+                const now = Date.now() / 1000;
+
+                const stopTimes = tripData.stopTimes || [];
+                for (const st of stopTimes) {
+                    const stopId = st.stop?.id;
+                    if (stopId === LAFAYETTE_STOP) {
+                        const arrivalTime = parseInt(st.arrival?.time);
+                        if (arrivalTime) {
+                            return arrivalTime - now;  // seconds until Lafayette
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Error fetching trip:', e);
+            }
+            return null;
         }
 
         async function getServiceAlerts(routes) {
@@ -427,7 +453,7 @@
                 });
 
                 const stationArrivals = parseArrivals(stationData);
-                const { route: fRoute, seconds: fTime } = getNextTrain(stationArrivals, ['F']);
+                const { route: fRoute, seconds: fTime, tripUrl: fTripUrl } = getNextTrain(stationArrivals, ['F']);
                 const { route: gRoute, seconds: gTime } = getNextTrain(stationArrivals, ['G']);
 
                 // G-Switch logic
@@ -443,11 +469,22 @@
                     }
                 }
 
-                // B/D Express logic
+                // B/D Express logic - get Lafayette arrival directly from trip data
                 let bdExpress = null;
                 const catchableBd = [];
-                if (fTime) {
-                    const fAtLafayette = fTime + travelTime;
+                let fAtLafayette = null;
+
+                if (fTime && fTripUrl) {
+                    // Fetch actual Lafayette arrival from the F train's trip data
+                    fAtLafayette = await getLafayetteArrivalFromTrip(fTripUrl);
+                }
+
+                // Fallback to calculated time if trip lookup fails
+                if (fAtLafayette === null && fTime) {
+                    fAtLafayette = fTime + travelTime;
+                }
+
+                if (fAtLafayette) {
                     const lafayetteArrivals = parseArrivals(lafayetteData, ['B', 'D']);
 
                     for (const { route, seconds: bdTime } of lafayetteArrivals) {
@@ -494,9 +531,9 @@
                 document.getElementById('fTime').textContent = fTime ? `${(fTime / 60).toFixed(1)} min` : '--';
                 document.getElementById('fTime').className = fTime ? 'train-time' : 'train-time not-found';
 
-                const fAtLafayetteTime = fTime ? (fTime + travelTime) / 60 : null;
-                document.getElementById('fLafayetteEta').textContent = fAtLafayetteTime ? `→ Lafayette in ${fAtLafayetteTime.toFixed(1)} min` : '';
-                document.getElementById('fAtLafayette').textContent = fAtLafayetteTime ? fAtLafayetteTime.toFixed(1) : '--';
+                const fAtLafayetteMin = fAtLafayette ? fAtLafayette / 60 : null;
+                document.getElementById('fLafayetteEta').textContent = fAtLafayetteMin ? `→ Lafayette in ${fAtLafayetteMin.toFixed(1)} min` : '';
+                document.getElementById('fAtLafayette').textContent = fAtLafayetteMin ? fAtLafayetteMin.toFixed(1) : '--';
 
                 document.getElementById('gTime').textContent = gTime ? `${(gTime / 60).toFixed(1)} min` : 'Not running';
                 document.getElementById('gTime').className = gTime ? 'train-time' : 'train-time not-found';
