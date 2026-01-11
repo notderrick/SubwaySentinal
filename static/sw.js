@@ -1,27 +1,41 @@
-// Service Worker for PWA
-const CACHE_NAME = 'subwaysentinal-v1';
-const urlsToCache = [
-    '/',
-    '/index.html'
-];
+// Service Worker for PWA - Network-first strategy
+const CACHE_NAME = 'subwaysentinal-v2';
 
 self.addEventListener('install', event => {
+    // Force immediate activation (skip waiting)
+    self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+    // Clean up old caches
     event.waitUntil(
-        caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.filter(name => name !== CACHE_NAME)
+                    .map(name => caches.delete(name))
+            );
+        }).then(() => self.clients.claim())
     );
 });
 
 self.addEventListener('fetch', event => {
-    // Network-first strategy for API calls
-    if (event.request.url.includes('realtimerail.nyc')) {
-        event.respondWith(
-            fetch(event.request).catch(() => caches.match(event.request))
-        );
-        return;
-    }
-
-    // Cache-first for static assets
+    // Network-first strategy for everything
+    // Only fall back to cache if offline
     event.respondWith(
-        caches.match(event.request).then(response => response || fetch(event.request))
+        fetch(event.request)
+            .then(response => {
+                // Cache successful responses for offline use
+                if (response.ok && event.request.method === 'GET') {
+                    const responseClone = response.clone();
+                    caches.open(CACHE_NAME).then(cache => {
+                        cache.put(event.request, responseClone);
+                    });
+                }
+                return response;
+            })
+            .catch(() => {
+                // Only use cache if network fails (offline)
+                return caches.match(event.request);
+            })
     );
 });
