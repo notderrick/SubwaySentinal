@@ -14,9 +14,10 @@ LAFAYETTE_STOP = "D21N"    # Broadway-Lafayette St (B/D Manhattan-bound)
 BASE_URL = "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops"
 ROUTE_BASE_URL = "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/routes"
 
-# Travel times will be calculated dynamically, but keep defaults as fallback
-CARROLL_TO_LAFAYETTE_TRAVEL_TIME = 8 * 60  # ~8 minutes
-SMITH_9TH_TO_LAFAYETTE_TRAVEL_TIME = 6 * 60  # ~6 minutes
+# Fallback travel times based on actual trip data (in seconds)
+# Carroll is closer to Lafayette than Smith-9th (F goes south first)
+CARROLL_TO_LAFAYETTE_TRAVEL_TIME = 12 * 60  # ~12 minutes
+SMITH_9TH_TO_LAFAYETTE_TRAVEL_TIME = 13 * 60  # ~13 minutes
 
 
 def get_arrivals(stop_id):
@@ -25,6 +26,57 @@ def get_arrivals(stop_id):
     response = requests.get(url, timeout=10)
     response.raise_for_status()
     return response.json()
+
+
+def get_travel_time_from_trip(station_data, from_stop_id, to_stop_id):
+    """
+    Calculate travel time from trip data by looking up a specific train's 
+    arrival times at both stations.
+    Returns travel time in seconds, or None if not found.
+    """
+    stop_times = station_data.get("stopTimes", [])
+    
+    for st in stop_times:
+        trip = st.get("trip", {})
+        route_id = trip.get("route", {}).get("id", "")
+        
+        # Only look at F trains
+        if route_id != "F":
+            continue
+            
+        trip_url = trip.get("resource", {}).get("url")
+        if not trip_url:
+            continue
+            
+        try:
+            # Fetch the full trip to get all stop times
+            response = requests.get(trip_url, timeout=5)
+            response.raise_for_status()
+            trip_data = response.json()
+            
+            trip_stop_times = trip_data.get("stopTimes", [])
+            
+            from_time = None
+            to_time = None
+            
+            for tst in trip_stop_times:
+                stop_id = tst.get("stop", {}).get("id")
+                arrival = tst.get("arrival", {}).get("time")
+                
+                if stop_id == from_stop_id and arrival:
+                    from_time = int(arrival)
+                elif stop_id == to_stop_id and arrival:
+                    to_time = int(arrival)
+                    
+            if from_time and to_time:
+                travel_time = to_time - from_time
+                if travel_time > 0:
+                    return travel_time
+                    
+        except Exception:
+            continue
+            
+    return None
 
 
 def parse_arrivals(data, routes=None):
@@ -217,7 +269,7 @@ def send_email(message):
         print(f"Email error: {e}")
 
 
-def get_station_report(station_name, station_stop, hoyt_data, lafayette_data, travel_time):
+def get_station_report(station_name, station_stop, hoyt_data, lafayette_data, fallback_travel_time):
     """Generate report for a single station."""
     lines = []
     
@@ -225,6 +277,11 @@ def get_station_report(station_name, station_stop, hoyt_data, lafayette_data, tr
     station_arrivals = parse_arrivals(station_data)
     f_route, f_time = get_next_train(station_arrivals, routes=["F"])
     g_route, g_time = get_next_train(station_arrivals, routes=["G"])
+
+    # Try to get dynamic travel time from trip data
+    travel_time = get_travel_time_from_trip(station_data, station_stop, LAFAYETTE_STOP)
+    if travel_time is None:
+        travel_time = fallback_travel_time
 
     # Default recommendation
     recommended_train = "F"

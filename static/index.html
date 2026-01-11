@@ -288,16 +288,17 @@
         const ALERTS_BASE_URL = 'https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/alerts';
 
         // Station configurations - Manhattan-bound (N suffix)
+        // Travel times are fallbacks; will be calculated dynamically from trip data
         const STATIONS = {
             carroll: {
                 name: 'Carroll St',
                 stopId: 'F21N',
-                travelTime: 8 * 60  // to Lafayette
+                travelTime: 12 * 60  // ~12 min to Lafayette (fallback)
             },
             smith: {
                 name: 'Smith-9th Sts',
                 stopId: 'F22N',
-                travelTime: 6 * 60  // to Lafayette
+                travelTime: 13 * 60  // ~13 min to Lafayette (fallback)
             }
         };
 
