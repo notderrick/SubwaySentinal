@@ -42,7 +42,34 @@
             text-align: center;
             color: #888;
             font-size: 0.9rem;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+        }
+
+        .station-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .station-btn {
+            padding: 10px 20px;
+            border: 2px solid #7b2cbf;
+            background: transparent;
+            color: #fff;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .station-btn.active {
+            background: linear-gradient(135deg, #7b2cbf 0%, #9d4edd 100%);
+            border-color: transparent;
+        }
+
+        .station-btn:hover {
+            transform: scale(1.05);
         }
 
         .recommendation {
@@ -191,13 +218,18 @@
         <h1>🚇 SubwaySentinal</h1>
         <p class="last-updated">Last updated: <span id="lastUpdated">--</span></p>
 
+        <div class="station-toggle">
+            <button class="station-btn active" id="carrollBtn" onclick="selectStation('carroll')">Carroll St</button>
+            <button class="station-btn" id="smithBtn" onclick="selectStation('smith')">Smith-9th</button>
+        </div>
+
         <div class="recommendation" id="recommendation">
             <h2>Recommended</h2>
             <div class="train" id="recommendedTrain">--</div>
         </div>
 
         <div class="card">
-            <h3>At Carroll St</h3>
+            <h3 id="stationName">At Carroll St</h3>
             <div class="train-row">
                 <div style="display: flex; align-items: center; gap: 15px;">
                     <div class="train-badge F">F</div>
@@ -241,10 +273,38 @@
     <script>
         const BASE_URL = 'https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops';
         const ROUTE_BASE_URL = 'https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/routes';
-        const CARROLL_F21 = 'F21';
-        const HOYT_A42 = 'A42';
-        const LAFAYETTE_D21 = 'D21';
-        const CARROLL_TO_LAFAYETTE_TRAVEL_TIME = 8 * 60;
+        const ALERTS_BASE_URL = 'https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/alerts';
+
+        // Station configurations - Manhattan-bound (N suffix)
+        const STATIONS = {
+            carroll: {
+                name: 'Carroll St',
+                stopId: 'F21N',
+                travelTime: 8 * 60  // to Lafayette
+            },
+            smith: {
+                name: 'Smith-9th Sts',
+                stopId: 'F22N',
+                travelTime: 6 * 60  // to Lafayette
+            }
+        };
+
+        const HOYT_STOP = 'A42N';
+        const LAFAYETTE_STOP = 'D21N';
+
+        let currentStation = localStorage.getItem('station') || 'carroll';
+
+        function selectStation(station) {
+            currentStation = station;
+            localStorage.setItem('station', station);
+
+            // Update UI
+            document.getElementById('carrollBtn').classList.toggle('active', station === 'carroll');
+            document.getElementById('smithBtn').classList.toggle('active', station === 'smith');
+            document.getElementById('stationName').textContent = `At ${STATIONS[station].name}`;
+
+            loadData();
+        }
 
         async function getArrivals(stopId) {
             const response = await fetch(`${BASE_URL}/${stopId}`);
@@ -285,8 +345,8 @@
         }
 
         async function getServiceAlerts(routes) {
-            const alerts = [];
-            const seenIds = new Set();
+            // Stage 1: Get alert IDs from each route
+            const alertIds = new Map();
 
             for (const route of routes) {
                 try {
@@ -294,27 +354,42 @@
                     const data = await response.json();
                     if (data.alerts) {
                         for (const alert of data.alerts) {
-                            if (!seenIds.has(alert.id)) {
-                                seenIds.add(alert.id);
-                                alerts.push({
-                                    route: route,
-                                    header: (Array.isArray(alert.header) && alert.header.length > 0 && alert.header[0].text) ? alert.header[0].text : 'Service Alert',
-                                    description: (Array.isArray(alert.description) && alert.description.length > 0 && alert.description[0].text) ? alert.description[0].text : ''
-                                });
+                            if (alert.id && !alertIds.has(alert.id)) {
+                                alertIds.set(alert.id, route);
                             }
                         }
                     }
                 } catch (e) { console.error(e); }
             }
+
+            // Stage 2: Fetch full details for each alert
+            const alerts = [];
+
+            for (const [alertId, route] of alertIds) {
+                try {
+                    const response = await fetch(`${ALERTS_BASE_URL}/${alertId}`);
+                    const alert = await response.json();
+
+                    alerts.push({
+                        route: route,
+                        header: (Array.isArray(alert.header) && alert.header.length > 0 && alert.header[0].text) ? alert.header[0].text : 'Service Alert',
+                        description: (Array.isArray(alert.description) && alert.description.length > 0 && alert.description[0].text) ? alert.description[0].text : ''
+                    });
+                } catch (e) { console.error(e); }
+            }
+
             return alerts;
         }
 
         async function loadData() {
             try {
-                const [carrollData, hoytData, lafayetteData] = await Promise.all([
-                    getArrivals(CARROLL_F21),
-                    getArrivals(HOYT_A42),
-                    getArrivals(LAFAYETTE_D21)
+                const station = STATIONS[currentStation];
+                const travelTime = station.travelTime;
+
+                const [stationData, hoytData, lafayetteData] = await Promise.all([
+                    getArrivals(station.stopId),
+                    getArrivals(HOYT_STOP),
+                    getArrivals(LAFAYETTE_STOP)
                 ]);
 
                 // Fetch alerts in parallel (but don't block main data if it fails)
@@ -338,9 +413,9 @@
                     }
                 });
 
-                const carrollArrivals = parseArrivals(carrollData);
-                const { route: fRoute, seconds: fTime } = getNextTrain(carrollArrivals, ['F']);
-                const { route: gRoute, seconds: gTime } = getNextTrain(carrollArrivals, ['G']);
+                const stationArrivals = parseArrivals(stationData);
+                const { route: fRoute, seconds: fTime } = getNextTrain(stationArrivals, ['F']);
+                const { route: gRoute, seconds: gTime } = getNextTrain(stationArrivals, ['G']);
 
                 // G-Switch logic
                 let gSwitch = null;
@@ -359,7 +434,7 @@
                 let bdExpress = null;
                 const catchableBd = [];
                 if (fTime) {
-                    const fAtLafayette = fTime + CARROLL_TO_LAFAYETTE_TRAVEL_TIME;
+                    const fAtLafayette = fTime + travelTime;
                     const lafayetteArrivals = parseArrivals(lafayetteData, ['B', 'D']);
 
                     for (const { route, seconds: bdTime } of lafayetteArrivals) {
@@ -398,7 +473,7 @@
                 document.getElementById('fTime').textContent = fTime ? `${(fTime / 60).toFixed(1)} min` : '--';
                 document.getElementById('fTime').className = fTime ? 'train-time' : 'train-time not-found';
 
-                const fAtLafayetteTime = fTime ? (fTime + CARROLL_TO_LAFAYETTE_TRAVEL_TIME) / 60 : null;
+                const fAtLafayetteTime = fTime ? (fTime + travelTime) / 60 : null;
                 document.getElementById('fLafayetteEta').textContent = fAtLafayetteTime ? `→ Lafayette in ${fAtLafayetteTime.toFixed(1)} min` : '';
                 document.getElementById('fAtLafayette').textContent = fAtLafayetteTime ? fAtLafayetteTime.toFixed(1) : '--';
 
@@ -447,8 +522,10 @@
             }
         }
 
-        // Load data on page load
-        loadData();
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            selectStation(currentStation);
+        });
 
         // Auto-refresh every 30 seconds
         setInterval(loadData, 30000);

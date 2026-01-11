@@ -3,16 +3,20 @@ import os
 import requests
 from datetime import datetime, timezone
 
-# Stop IDs
-CARROLL_F21 = "F21"  # Carroll St
-HOYT_A42 = "A42"     # Hoyt-Schermerhorn Sts
-LAFAYETTE_D21 = "D21"  # Broadway-Lafayette St
+# Stop IDs - Manhattan-bound direction (N suffix)
+# From Carroll/Smith-9th, "N" goes toward Queens via Manhattan (34th St)
+# From Lafayette, "N" goes toward Bronx via Manhattan
+CARROLL_STOP = "F21N"      # Carroll St (Manhattan-bound)
+SMITH_9TH_STOP = "F22N"    # Smith-9th Sts (Manhattan-bound)
+HOYT_STOP = "A42N"         # Hoyt-Schermerhorn Sts (A train for G-Switch)
+LAFAYETTE_STOP = "D21N"    # Broadway-Lafayette St (B/D Manhattan-bound)
 
 BASE_URL = "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops"
 ROUTE_BASE_URL = "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/routes"
 
-# Approximate travel time from Carroll to Lafayette (in seconds)
+# Travel times will be calculated dynamically, but keep defaults as fallback
 CARROLL_TO_LAFAYETTE_TRAVEL_TIME = 8 * 60  # ~8 minutes
+SMITH_9TH_TO_LAFAYETTE_TRAVEL_TIME = 6 * 60  # ~6 minutes
 
 
 def get_arrivals(stop_id):
@@ -95,63 +99,88 @@ def check_g_switch(carroll_data, hoyt_data):
     return None, None, None
 
 
-def check_bd_express(carroll_data, lafayette_data):
+def check_bd_express(station_data, lafayette_data, travel_time=CARROLL_TO_LAFAYETTE_TRAVEL_TIME):
     """
     B/D Express Logic:
-    If F from Carroll arrives at Lafayette within 2 min before a Northbound B or D,
+    If F from station arrives at Lafayette within 2 min before a Northbound B or D,
     recommend transfer.
     """
-    carroll_arrivals = parse_arrivals(carroll_data)
-    f_route, f_time = get_next_train(carroll_arrivals, routes=["F"])
+    station_arrivals = parse_arrivals(station_data)
+    f_route, f_time = get_next_train(station_arrivals, routes=["F"])
 
     if f_time is None:
         return None
 
     # Estimated arrival at Lafayette
-    f_at_lafayette = f_time + CARROLL_TO_LAFAYETTE_TRAVEL_TIME
+    f_at_lafayette = f_time + travel_time
 
     # Check B/D at Lafayette
     lafayette_arrivals = parse_arrivals(lafayette_data, routes=["B", "D"])
 
     for route, bd_time in lafayette_arrivals:
-        # F arrives within 2 minutes before B/D
+        # F arrives within 3 minutes before B/D
         if 0 <= (bd_time - f_at_lafayette) <= 3 * 60:
             return f"Transfer to {route} at Lafayette for Express"
 
 
 def get_service_alerts(routes):
-    """Fetch active service alerts for specified routes."""
-    alerts = []
-    seen_ids = set()
+    """Fetch active service alerts for specified routes.
     
+    Two-stage approach:
+    1. Get alert IDs from each route endpoint
+    2. Fetch full alert details for each unique ID
+    """
+    alert_ids = set()
+    
+    # Stage 1: Collect alert IDs from each route
     for route in routes:
         try:
             url = f"{ROUTE_BASE_URL}/{route}"
             response = requests.get(url, timeout=5)
-            if response.ok:
-                data = response.json()
-                route_alerts = data.get("alerts", [])
-                for alert in route_alerts:
-                    alert_id = alert.get("id")
-                    if alert_id and alert_id not in seen_ids:
-                        seen_ids.add(alert_id)
-                        
-                        header_list = alert.get("header", [])
-                        header = "Service Alert"
-                        if header_list and isinstance(header_list, list) and "text" in header_list[0]:
-                            header = header_list[0]["text"]
-                            
-                        desc_list = alert.get("description", [])
-                        description = ""
-                        if desc_list and isinstance(desc_list, list) and "text" in desc_list[0]:
-                            description = desc_list[0]["text"]
+            response.raise_for_status()
+            data = response.json()
+            
+            route_alerts = data.get("alerts", [])
+            for alert in route_alerts:
+                alert_id = alert.get("id")
+                if alert_id:
+                    alert_ids.add((alert_id, route))
+        except Exception as e:
+            print(f"Error fetching route {route}: {e}")
+            continue
+    
+    # Stage 2: Fetch full details for each alert
+    alerts = []
+    seen_ids = set()
+    
+    for alert_id, route in alert_ids:
+        if alert_id in seen_ids:
+            continue
+        seen_ids.add(alert_id)
+        
+        try:
+            url = f"https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/alerts/{alert_id}"
+            response = requests.get(url, timeout=5)
+            response.raise_for_status()
+            alert = response.json()
+            
+            header_list = alert.get("header", [])
+            header = "Service Alert"
+            if header_list and isinstance(header_list, list) and len(header_list) > 0 and "text" in header_list[0]:
+                header = header_list[0]["text"]
+                
+            desc_list = alert.get("description", [])
+            description = ""
+            if desc_list and isinstance(desc_list, list) and len(desc_list) > 0 and "text" in desc_list[0]:
+                description = desc_list[0]["text"]
 
-                        alerts.append({
-                            "route": route,
-                            "header": header,
-                            "description": description
-                        })
-        except Exception:
+            alerts.append({
+                "route": route,
+                "header": header,
+                "description": description
+            })
+        except Exception as e:
+            print(f"Error fetching alert {alert_id}: {e}")
             continue
             
     return alerts
@@ -188,80 +217,80 @@ def send_email(message):
         print(f"Email error: {e}")
 
 
+def get_station_report(station_name, station_stop, hoyt_data, lafayette_data, travel_time):
+    """Generate report for a single station."""
+    lines = []
+    
+    station_data = get_arrivals(station_stop)
+    station_arrivals = parse_arrivals(station_data)
+    f_route, f_time = get_next_train(station_arrivals, routes=["F"])
+    g_route, g_time = get_next_train(station_arrivals, routes=["G"])
+
+    # Default recommendation
+    recommended_train = "F"
+
+    # Check G-Switch
+    g_switch, g_arrival, a_arrival = check_g_switch(station_data, hoyt_data)
+    if g_switch:
+        recommended_train = "G"
+
+    # Check B/D Express
+    bd_advice = check_bd_express(station_data, lafayette_data, travel_time)
+    if bd_advice:
+        if "B" in bd_advice:
+            recommended_train = "F → B"
+        elif "D" in bd_advice:
+            recommended_train = "F → D"
+
+    lines.append(f"📍 FROM {station_name.upper()}")
+    lines.append(f"🚇 Recommendation: {recommended_train}")
+    lines.append(f"  F train: {f_time/60:.1f} min" if f_time else "  F train: Not found")
+    lines.append(f"  G train: {g_time/60:.1f} min" if g_time else "  G train: Not running")
+    
+    if g_switch:
+        lines.append(f"  ⚠️ G-SWITCH: {g_switch}")
+    
+    if f_time:
+        f_at_lafayette = f_time + travel_time
+        lines.append(f"  → Lafayette in: {f_at_lafayette/60:.1f} min")
+        
+        lafayette_arrivals = parse_arrivals(lafayette_data, routes=["B", "D"])
+        if lafayette_arrivals:
+            for route, bd_time in lafayette_arrivals[:2]:
+                wait = bd_time - f_at_lafayette
+                if wait >= 0:
+                    viable = "✓" if wait <= 3 * 60 else ""
+                    lines.append(f"    {route} in {bd_time/60:.1f} min (wait: {wait/60:.1f} min) {viable}")
+    
+    return lines
+
+
 def main(dry_run=False):
     try:
-        # Fetch data for all stops
-        carroll_data = get_arrivals(CARROLL_F21)
-        hoyt_data = get_arrivals(HOYT_A42)
-        lafayette_data = get_arrivals(LAFAYETTE_D21)
+        # Fetch shared data
+        hoyt_data = get_arrivals(HOYT_STOP)
+        lafayette_data = get_arrivals(LAFAYETTE_STOP)
 
-        # Determine base recommendation
-        carroll_arrivals = parse_arrivals(carroll_data)
-        f_route, f_time = get_next_train(carroll_arrivals, routes=["F"])
-        g_route, g_time = get_next_train(carroll_arrivals, routes=["G"])
-
-        # Default to F
-        recommended_train = "F"
-        alerts = []
-        transfer_advice = ""
-
-        # Check G-Switch
-        g_switch, g_arrival, a_arrival = check_g_switch(carroll_data, hoyt_data)
-        if g_switch:
-            recommended_train = "G"
-            alerts.append(g_switch)
-
-        # Check B/D Express
-        bd_advice = check_bd_express(carroll_data, lafayette_data)
-        if bd_advice:
-            transfer_advice = bd_advice
-            # Extract which train (B or D) from the advice
-            if "B" in bd_advice:
-                recommended_train = "F → B"
-            elif "D" in bd_advice:
-                recommended_train = "F → D"
-
-        # Build verbose message for email
+        # Build email with both stations
         lines = []
-        lines.append(f"🚇 RECOMMENDATION: Take the {recommended_train}")
+        
+        # Carroll St
+        lines.extend(get_station_report(
+            "Carroll St", CARROLL_STOP, hoyt_data, lafayette_data, 
+            CARROLL_TO_LAFAYETTE_TRAVEL_TIME
+        ))
+        
         lines.append("")
-        lines.append("📍 AT CARROLL ST")
-        lines.append(f"  F train: {f_time/60:.1f} min" if f_time else "  F train: Not found")
-        lines.append(f"  G train: {g_time/60:.1f} min" if g_time else "  G train: Not running")
+        lines.append("─" * 30)
+        lines.append("")
         
-        if g_switch:
-            lines.append("")
-            lines.append(f"⚠️ G-SWITCH: {g_switch}")
-        
-        if f_time:
-            f_at_lafayette = f_time + CARROLL_TO_LAFAYETTE_TRAVEL_TIME
-            lines.append("")
-            lines.append("🚄 B/D EXPRESS AT LAFAYETTE")
-            lines.append(f"  F arrives at Lafayette in: {f_at_lafayette/60:.1f} min")
-            
-            lafayette_arrivals = parse_arrivals(lafayette_data, routes=["B", "D"])
-            if lafayette_arrivals:
-                catchable = []
-                for route, bd_time in lafayette_arrivals:
-                    wait = bd_time - f_at_lafayette
-                    if wait >= 0:
-                        viable = "✓" if wait <= 3 * 60 else ""
-                        catchable.append((route, bd_time, wait, viable))
-                        if len(catchable) >= 2:
-                            break
-                
-                if catchable:
-                    for route, bd_time, wait, viable in catchable:
-                        lines.append(f"  {route} in {bd_time/60:.1f} min (wait: {wait/60:.1f} min) {viable}")
-                else:
-                    lines.append("  No catchable B/D trains")
-            else:
-                lines.append("  No B/D trains at Lafayette")
-            
-        if bd_advice:
-            lines.append(f"  ✓ {bd_advice}")
+        # Smith-9th
+        lines.extend(get_station_report(
+            "Smith-9th Sts", SMITH_9TH_STOP, hoyt_data, lafayette_data,
+            SMITH_9TH_TO_LAFAYETTE_TRAVEL_TIME
+        ))
 
-        # Service Alerts
+        # Service Alerts (shared)
         service_alerts = get_service_alerts(["F", "G", "B", "D"])
         if service_alerts:
             lines.append("")
@@ -269,14 +298,8 @@ def main(dry_run=False):
             for alert in service_alerts:
                 lines.append(f"[{alert['route']}] {alert['header']}")
 
-
-
-
-
-        
         message = "\n".join(lines)
 
-        # Debug info for dry run
         if dry_run:
             print("=== DRY RUN ===")
             print(message)
@@ -294,3 +317,4 @@ if __name__ == "__main__":
     parser.add_argument("--dry-run", action="store_true", help="Print output without sending SMS")
     args = parser.parse_args()
     main(dry_run=args.dry_run)
+

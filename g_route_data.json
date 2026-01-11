@@ -1,0 +1,1480 @@
+{
+  "id": "G",
+  "resource": {
+    "path": "systems/us-ny-subway/routes/G",
+    "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/routes/G"
+  },
+  "system": {
+    "id": "us-ny-subway",
+    "resource": {
+      "path": "systems/us-ny-subway",
+      "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+    }
+  },
+  "shortName": "G",
+  "longName": "Brooklyn-Queens Crosstown",
+  "color": "799534",
+  "textColor": "FFFFFF",
+  "description": "Trains operate between Court Sq, Queens and Church Av, Brooklyn at all times.",
+  "url": "https://www.mta.info/schedules/subway/g-train",
+  "sortOrder": 9,
+  "continuousPickup": "NOT_ALLOWED",
+  "continuousDropOff": "NOT_ALLOWED",
+  "type": "SUBWAY",
+  "agency": {
+    "id": "MTA NYCT",
+    "resource": {
+      "path": "systems/us-ny-subway/agencies/MTA NYCT",
+      "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/agencies/MTA NYCT"
+    },
+    "system": {
+      "id": "us-ny-subway",
+      "resource": {
+        "path": "systems/us-ny-subway",
+        "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+      }
+    },
+    "name": "MTA New York City Transit"
+  },
+  "alerts": [
+    {
+      "id": "lmm:planned_work:29071",
+      "resource": {
+        "path": "systems/us-ny-subway/alerts/lmm:planned_work:29071",
+        "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/alerts/lmm:planned_work:29071"
+      },
+      "system": {
+        "id": "us-ny-subway",
+        "resource": {
+          "path": "systems/us-ny-subway",
+          "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+        }
+      },
+      "cause": "MAINTENANCE",
+      "effect": "SIGNIFICANT_DELAYS"
+    }
+  ],
+  "estimatedHeadway": 483,
+  "serviceMaps": [
+    {
+      "configId": "realtime",
+      "stops": [
+        {
+          "id": "G22",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G22",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G22"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Court Sq"
+        },
+        {
+          "id": "G24",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G24",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G24"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "21 St"
+        },
+        {
+          "id": "G26",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G26",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G26"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Greenpoint Av"
+        },
+        {
+          "id": "G28",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G28",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G28"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Nassau Av"
+        },
+        {
+          "id": "G29",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G29",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G29"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Metropolitan Av"
+        },
+        {
+          "id": "G30",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G30",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G30"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Broadway"
+        },
+        {
+          "id": "G31",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G31",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G31"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Flushing Av"
+        },
+        {
+          "id": "G32",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G32",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G32"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Myrtle-Willoughby Avs"
+        },
+        {
+          "id": "G33",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G33",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G33"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Bedford-Nostrand Avs"
+        }
+      ]
+    },
+    {
+      "configId": "weekday",
+      "stops": [
+        {
+          "id": "G22",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G22",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G22"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Court Sq"
+        },
+        {
+          "id": "G24",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G24",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G24"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "21 St"
+        },
+        {
+          "id": "G26",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G26",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G26"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Greenpoint Av"
+        },
+        {
+          "id": "G28",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G28",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G28"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Nassau Av"
+        },
+        {
+          "id": "G29",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G29",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G29"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Metropolitan Av"
+        },
+        {
+          "id": "G30",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G30",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G30"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Broadway"
+        },
+        {
+          "id": "G31",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G31",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G31"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Flushing Av"
+        },
+        {
+          "id": "G32",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G32",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G32"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Myrtle-Willoughby Avs"
+        },
+        {
+          "id": "G33",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G33",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G33"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Bedford-Nostrand Avs"
+        },
+        {
+          "id": "G34",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G34",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G34"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Classon Av"
+        },
+        {
+          "id": "G35",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G35",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G35"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Clinton-Washington Avs"
+        },
+        {
+          "id": "G36",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G36",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G36"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Fulton St"
+        },
+        {
+          "id": "A42",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/A42",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/A42"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Hoyt-Schermerhorn Sts"
+        },
+        {
+          "id": "F20",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F20",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F20"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Bergen St"
+        },
+        {
+          "id": "F21",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F21",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F21"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Carroll St"
+        },
+        {
+          "id": "F22",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F22",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F22"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Smith-9 Sts"
+        },
+        {
+          "id": "F23",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F23",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F23"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "4 Av-9 St"
+        },
+        {
+          "id": "F24",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F24",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F24"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "7 Av"
+        },
+        {
+          "id": "F25",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F25",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F25"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "15 St-Prospect Park"
+        },
+        {
+          "id": "F26",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F26",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F26"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Fort Hamilton Pkwy"
+        },
+        {
+          "id": "F27",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F27",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F27"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Church Av"
+        }
+      ]
+    },
+    {
+      "configId": "weekend",
+      "stops": [
+        {
+          "id": "G22",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G22",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G22"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Court Sq"
+        },
+        {
+          "id": "G24",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G24",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G24"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "21 St"
+        },
+        {
+          "id": "G26",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G26",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G26"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Greenpoint Av"
+        },
+        {
+          "id": "G28",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G28",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G28"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Nassau Av"
+        },
+        {
+          "id": "G29",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G29",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G29"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Metropolitan Av"
+        },
+        {
+          "id": "G30",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G30",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G30"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Broadway"
+        },
+        {
+          "id": "G31",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G31",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G31"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Flushing Av"
+        },
+        {
+          "id": "G32",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G32",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G32"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Myrtle-Willoughby Avs"
+        },
+        {
+          "id": "G33",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G33",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G33"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Bedford-Nostrand Avs"
+        },
+        {
+          "id": "G34",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G34",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G34"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Classon Av"
+        },
+        {
+          "id": "G35",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G35",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G35"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Clinton-Washington Avs"
+        },
+        {
+          "id": "G36",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G36",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G36"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Fulton St"
+        },
+        {
+          "id": "A42",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/A42",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/A42"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Hoyt-Schermerhorn Sts"
+        },
+        {
+          "id": "F20",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F20",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F20"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Bergen St"
+        },
+        {
+          "id": "F21",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F21",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F21"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Carroll St"
+        },
+        {
+          "id": "F22",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F22",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F22"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Smith-9 Sts"
+        },
+        {
+          "id": "F23",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F23",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F23"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "4 Av-9 St"
+        },
+        {
+          "id": "F24",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F24",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F24"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "7 Av"
+        },
+        {
+          "id": "F25",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F25",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F25"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "15 St-Prospect Park"
+        },
+        {
+          "id": "F26",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F26",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F26"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Fort Hamilton Pkwy"
+        },
+        {
+          "id": "F27",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F27",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F27"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Church Av"
+        }
+      ]
+    },
+    {
+      "configId": "weeknight",
+      "stops": [
+        {
+          "id": "G22",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G22",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G22"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Court Sq"
+        },
+        {
+          "id": "G24",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G24",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G24"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "21 St"
+        },
+        {
+          "id": "G26",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G26",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G26"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Greenpoint Av"
+        },
+        {
+          "id": "G28",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G28",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G28"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Nassau Av"
+        },
+        {
+          "id": "G29",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G29",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G29"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Metropolitan Av"
+        },
+        {
+          "id": "G30",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G30",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G30"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Broadway"
+        },
+        {
+          "id": "G31",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G31",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G31"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Flushing Av"
+        },
+        {
+          "id": "G32",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G32",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G32"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Myrtle-Willoughby Avs"
+        },
+        {
+          "id": "G33",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G33",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G33"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Bedford-Nostrand Avs"
+        },
+        {
+          "id": "G34",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G34",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G34"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Classon Av"
+        },
+        {
+          "id": "G35",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G35",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G35"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Clinton-Washington Avs"
+        },
+        {
+          "id": "G36",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G36",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G36"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Fulton St"
+        },
+        {
+          "id": "A42",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/A42",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/A42"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Hoyt-Schermerhorn Sts"
+        },
+        {
+          "id": "F20",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F20",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F20"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Bergen St"
+        },
+        {
+          "id": "F21",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F21",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F21"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Carroll St"
+        },
+        {
+          "id": "F22",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F22",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F22"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Smith-9 Sts"
+        },
+        {
+          "id": "F23",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F23",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F23"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "4 Av-9 St"
+        },
+        {
+          "id": "F24",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F24",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F24"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "7 Av"
+        },
+        {
+          "id": "F25",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F25",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F25"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "15 St-Prospect Park"
+        },
+        {
+          "id": "F26",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F26",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F26"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Fort Hamilton Pkwy"
+        },
+        {
+          "id": "F27",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F27",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F27"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Church Av"
+        }
+      ]
+    },
+    {
+      "configId": "alltimes",
+      "stops": [
+        {
+          "id": "G22",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G22",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G22"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Court Sq"
+        },
+        {
+          "id": "G24",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G24",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G24"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "21 St"
+        },
+        {
+          "id": "G26",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G26",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G26"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Greenpoint Av"
+        },
+        {
+          "id": "G28",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G28",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G28"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Nassau Av"
+        },
+        {
+          "id": "G29",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G29",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G29"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Metropolitan Av"
+        },
+        {
+          "id": "G30",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G30",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G30"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Broadway"
+        },
+        {
+          "id": "G31",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G31",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G31"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Flushing Av"
+        },
+        {
+          "id": "G32",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G32",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G32"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Myrtle-Willoughby Avs"
+        },
+        {
+          "id": "G33",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G33",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G33"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Bedford-Nostrand Avs"
+        },
+        {
+          "id": "G34",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G34",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G34"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Classon Av"
+        },
+        {
+          "id": "G35",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G35",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G35"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Clinton-Washington Avs"
+        },
+        {
+          "id": "G36",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/G36",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/G36"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Fulton St"
+        },
+        {
+          "id": "A42",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/A42",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/A42"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Hoyt-Schermerhorn Sts"
+        },
+        {
+          "id": "F20",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F20",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F20"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Bergen St"
+        },
+        {
+          "id": "F21",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F21",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F21"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Carroll St"
+        },
+        {
+          "id": "F22",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F22",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F22"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Smith-9 Sts"
+        },
+        {
+          "id": "F23",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F23",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F23"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "4 Av-9 St"
+        },
+        {
+          "id": "F24",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F24",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F24"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "7 Av"
+        },
+        {
+          "id": "F25",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F25",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F25"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "15 St-Prospect Park"
+        },
+        {
+          "id": "F26",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F26",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F26"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Fort Hamilton Pkwy"
+        },
+        {
+          "id": "F27",
+          "resource": {
+            "path": "systems/us-ny-subway/stops/F27",
+            "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway/stops/F27"
+          },
+          "system": {
+            "id": "us-ny-subway",
+            "resource": {
+              "path": "systems/us-ny-subway",
+              "url": "https://realtimerail.nyc/transiter/v0.6/systems/us-ny-subway"
+            }
+          },
+          "name": "Church Av"
+        }
+      ]
+    }
+  ]
+}
